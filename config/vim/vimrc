@@ -1,0 +1,85 @@
+" bootxnix vim - light, nvim-like. Options from the archived .vimrc; plugins are
+" wired in by Nix (modules/vim.nix), so there is no vim-plug bootstrap here.
+
+set nocompatible
+filetype plugin indent on
+syntax on
+
+" --- options -------------------------------------------------------------
+set scrolloff=8
+set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+set smartindent
+set number relativenumber
+set nobackup nowritebackup noswapfile
+set undofile undodir=~/.vim/undo
+set hidden
+set ignorecase smartcase
+set incsearch hlsearch
+set splitbelow splitright
+set laststatus=2
+set cursorline
+set encoding=UTF-8
+set termguicolors
+set mouse=a
+set clipboard=unnamedplus
+set signcolumn=yes
+set updatetime=250
+set completeopt=menuone,noselect
+
+if !isdirectory($HOME . "/.vim/undo") | call mkdir($HOME . "/.vim/undo", "p") | endif
+
+" --- theme ---------------------------------------------------------------
+set rtp^=/etc/vim
+silent! colorscheme rose-pine
+
+" --- leader / keymaps (LazyVim + fzf muscle memory) ----------------------
+let mapleader = " "
+
+" fzf (guarded: the commands exist only if fzf-vim loaded)
+if exists(':Files')
+  nnoremap <leader>ff :Files<CR>
+  nnoremap <leader>fb :Buffers<CR>
+  nnoremap <leader>fr :History<CR>
+  nnoremap <leader>fh :Helptags<CR>
+  nnoremap <C-p>      :Files<CR>
+endif
+if exists(':Rg')
+  nnoremap <leader>fg :Rg<CR>
+  nnoremap <leader>/  :Rg<CR>
+  nnoremap <leader>fw :execute 'Rg ' . expand('<cword>')<CR>
+endif
+
+" file explorer
+nnoremap <leader>e :Lexplore<CR>
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 22
+
+" buffers
+nnoremap <S-h> :bprevious<CR>
+nnoremap <S-l> :bnext<CR>
+nnoremap <leader>bd :bdelete<CR>
+
+" write / quit
+nnoremap <C-s> :w<CR>
+nnoremap <leader>qq :qa<CR>
+
+" plugins (guarded)
+if exists(':UndotreeToggle') | nnoremap <leader>u :UndotreeToggle<CR> | endif
+if exists(':Git')            | nnoremap <leader>gg :Git<CR>          | endif
+nnoremap <silent><F7> :set hlsearch!<CR>
+
+" from the old .vimrc: move lines, clipboard yank, paste without yank
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap <leader>p "_dP
+vnoremap <leader>y "+y
+nnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
+
+" terminal splits (from the bootxnix nvim keymaps)
+nnoremap <leader>t- :split  \| terminal<CR>i
+nnoremap <leader>t\| :vsplit \| terminal<CR>i
+
+" indentLine (guarded)
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="shortcut icon" href="favicon.png" />
+  </head>
+  <body>
+    <div class="everything">
+      <div id="time" class="time"></div>
+      <form action="https://duckduckgo.com/" method="GET">
+        <input
+          autofocus
+          name="q"
+          class="search"
+          type="search"
+          id="search-bar-input"
+          placeholder=""
+        />
+      </form>
+      <div class="box">
+        <div class="link">
+          <ul>
+            <li><a href="https://app.hackthebox.com">hackthebox</a></li>
+            <li><a href="https://tryhackme.com">tryhackme</a></li>
+            <li><a href="https://portswigger.net/web-security">websec academy</a></li>
+            <li><a href="https://github.com">github</a></li>
+          </ul>
+        </div>
+        <div class="link">
+          <ul>
+            <li><a href="https://book.hacktricks.wiki">hacktricks</a></li>
+            <li><a href="https://gtfobins.github.io">gtfobins</a></li>
+            <li><a href="https://www.revshells.com">revshells</a></li>
+            <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings">payloads</a></li>
+          </ul>
+        </div>
+        <div class="link">
+          <ul>
+            <li><a href="https://gchq.github.io/CyberChef">cyberchef</a></li>
+            <li><a href="https://www.exploit-db.com">exploit-db</a></li>
+            <li><a href="https://lolbas-project.github.io">lolbas</a></li>
+            <li><a href="https://search.nixos.org/packages">nixpkgs</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script>
+      function updateClock() {
+        let date = new Date();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        document.getElementById("time").innerHTML = hours + ":" + minutes;
+        setTimeout(updateClock, 1000);
+      }
+
+      updateClock();
+    </script>
+  </body>
+</html>

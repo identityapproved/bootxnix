@@ -1,0 +1,52 @@
+# bootxnix aliases. General shell helpers ported from lainland, with the
+# Gentoo/Void package blocks rewritten for NixOS. No CTF-specific aliases here;
+# they get added when needed. /etc is read-only, so the *config aliases open
+# the repo copies (deploy target: /root/bootxnix).
+: "${BOOTXNIX_FLAKE:=/root/bootxnix}"
+
+alias zshconfig="sudo vim $BOOTXNIX_FLAKE/modules/shell.nix"
+alias aliasconfig="sudo vim $BOOTXNIX_FLAKE/config/zsh/aliases"
+alias tmuxconfig="sudo vim $BOOTXNIX_FLAKE/config/tmux/tmux.conf"
+
+alias q="exit"
+alias rf="rm -rf"
+alias cat="bat --paging=never"
+alias c="clear"
+
+alias v="vim"
+alias vi="vim"
+alias yz="yazi"
+alias lz="lazygit"
+
+# --- NixOS: rebuild / flake / generations ---------------------------------
+# The flake is pushed to /root/bootxnix; override BOOTXNIX_FLAKE to point
+# elsewhere. path: so uncommitted secrets/ssh-keys.nix is seen.
+alias nrb="sudo nixos-rebuild build  --flake path:$BOOTXNIX_FLAKE#bootxnix"
+alias nrs="sudo nixos-rebuild switch --flake path:$BOOTXNIX_FLAKE#bootxnix"
+alias nrt="sudo nixos-rebuild test   --flake path:$BOOTXNIX_FLAKE#bootxnix"
+alias nrollback="sudo nixos-rebuild switch --rollback"
+alias nfu="nix flake update --flake $BOOTXNIX_FLAKE"
+alias ngc="sudo nix-collect-garbage --delete-older-than 7d"
+alias ngens="sudo nix-env --list-generations -p /nix/var/nix/profiles/system"
+alias ns="nix search nixpkgs"
+nsh()   { nix shell "nixpkgs#$1"; }                                  # one-off tool (was xi)
+nwhy()  { nix why-depends /run/current-system "nixpkgs#$1"; }        # reverse deps (was eqd)
+nfiles(){ ls -l "$(nix build --no-link --print-out-paths "nixpkgs#$1")"; }  # package files (was eqf)
+
+# --- systemd (container init) ---------------------------------------------
+alias svs="systemctl status"
+alias svu="sudo systemctl start"
+alias svd="sudo systemctl stop"
+alias svr="sudo systemctl restart"
+jf() { sudo journalctl -fu "$1"; }
+
+# --- misc -----------------------------------------------------------------
+alias ports="ss -tulpen"
+alias myip="ip -br a"
+alias route="ip route"
+alias lsblko="lsblk -o NAME,SIZE,FSTYPE,LABEL,UUID,MOUNTPOINT,MODEL"
+alias make="make -j\$(nproc)"
+alias ninja="ninja -j\$(nproc)"
+alias n="ninja"
+
+# archive extraction is provided by oh-my-zsh's `extract` plugin (x <file>).

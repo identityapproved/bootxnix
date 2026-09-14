@@ -1,6 +1,13 @@
-# Ignore build outputs from performing a nix-build or `nix build` command
+# Nix build outputs
 result
 result-*
 
-# Ignore automatically generated direnv output
+# direnv
 .direnv
+
+# per-box secret: the actual key list (commit the .example only)
+secrets/ssh-keys.nix
+
+# committed flake.lock is fine; ISO images and reference clones are not
+*.iso
+refs/
