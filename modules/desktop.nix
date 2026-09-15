@@ -27,9 +27,16 @@ let
   # into the store. Runs as the logged-in user.
   session = pkgs.writeShellScript "bootxnix-session" ''
     export PATH=${lib.makeBinPath [ pkgs.feh slstatus pkgs.coreutils dwm pkgs.setxkbmap ]}:$PATH
-    # Re-assert the keymap inside the session: xrdp/xorgxrdp sets its own keymap
-    # from what the RDP client advertises, which overrides services.xserver.xkb.
-    setxkbmap -layout us,ua -option grp:sclk_toggle,caps:swapescape
+    # Keymap: xrdp/xorgxrdp pushes the client's keymap into the session *after*
+    # this script starts, clobbering both services.xserver.xkb and a one-shot
+    # setxkbmap here (confirmed: slstatus was running but `setxkbmap -query`
+    # showed no options). So set it now and re-assert it over the first ~10s,
+    # by which point xrdp has finished.
+    bootxnix_keymap() {
+      setxkbmap -layout us -option caps:swapescape
+    }
+    bootxnix_keymap
+    ( for d in 1 2 3 5; do sleep "$d"; bootxnix_keymap; done ) &
     feh --no-fehbg --randomize --bg-fill /etc/bootxnix/wallpapers
     ( while sleep 900; do feh --no-fehbg --randomize --bg-fill /etc/bootxnix/wallpapers; done ) &
     slstatus &
@@ -43,14 +50,19 @@ in
     windowManager.dwm.package = dwm;
     displayManager.startx.enable = true; # no greeter; xrdp drives the session
 
-    # Same keyboard as every other machine here (lainland sway/hypr):
-    # Caps and Escape swapped, us/ua toggled with Scroll Lock. Over RDP the
+    # Caps and Escape swapped, as on every other machine here. Over RDP the
     # client sends scancodes and the *remote* side decides what they mean, so
     # without this the laptop's swap does not carry into the session and Caps
     # behaves as Caps inside dwm/vim.
+    #
+    # US only, and no group toggle: this box is reached over RDP from one
+    # laptop and does not need the ua layout.
+    #
+    # This alone is not enough - xrdp overrides it at session start; the real
+    # enforcement is the setxkbmap re-assert in the session script below.
     xkb = {
-      layout = "us,ua";
-      options = "grp:sclk_toggle,caps:swapescape";
+      layout = "us";
+      options = "caps:swapescape";
     };
   };
 
