@@ -26,7 +26,10 @@ let
   # The one script in the repo: xrdp needs a single session command, generated
   # into the store. Runs as the logged-in user.
   session = pkgs.writeShellScript "bootxnix-session" ''
-    export PATH=${lib.makeBinPath [ pkgs.feh slstatus pkgs.coreutils dwm ]}:$PATH
+    export PATH=${lib.makeBinPath [ pkgs.feh slstatus pkgs.coreutils dwm pkgs.xorg.setxkbmap ]}:$PATH
+    # Re-assert the keymap inside the session: xrdp/xorgxrdp sets its own keymap
+    # from what the RDP client advertises, which overrides services.xserver.xkb.
+    setxkbmap -layout us,ua -option grp:sclk_toggle,caps:swapescape
     feh --no-fehbg --randomize --bg-fill /etc/bootxnix/wallpapers
     ( while sleep 900; do feh --no-fehbg --randomize --bg-fill /etc/bootxnix/wallpapers; done ) &
     slstatus &
@@ -39,6 +42,16 @@ in
     windowManager.dwm.enable = true;
     windowManager.dwm.package = dwm;
     displayManager.startx.enable = true; # no greeter; xrdp drives the session
+
+    # Same keyboard as every other machine here (lainland sway/hypr):
+    # Caps and Escape swapped, us/ua toggled with Scroll Lock. Over RDP the
+    # client sends scancodes and the *remote* side decides what they mean, so
+    # without this the laptop's swap does not carry into the session and Caps
+    # behaves as Caps inside dwm/vim.
+    xkb = {
+      layout = "us,ua";
+      options = "grp:sclk_toggle,caps:swapescape";
+    };
   };
 
   services.xrdp = {
