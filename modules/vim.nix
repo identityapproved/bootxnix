@@ -7,13 +7,12 @@ let
 
   plugins = builtins.concatLists [
     (pick "fzf-vim")
-    (pick "fzfWrapper")
+    (pick "fzf-wrapper")
     (pick "vim-tmux-navigator")
     (pick "vim-commentary")
     (pick "vim-surround")
     (pick "vim-fugitive")
     (pick "vim-gitgutter")
-    (pick "vim-polyglot")
     (pick "undotree")
     (pick "vim-sleuth")
     (pick "indentLine")
