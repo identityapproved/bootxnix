@@ -30,7 +30,9 @@ in
 {
   environment.systemPackages = [ vim pkgs.fzf pkgs.ripgrep ];
 
-  programs.vim.defaultEditor = true;
+  # Default editor is set via EDITOR/VISUAL in modules/shell.nix. We do NOT use
+  # `programs.vim` here: it would install nixpkgs' plain vim and collide with the
+  # customized `vim` package above.
 
   # The colorscheme lives outside the plugin set (it is a plain runtime file),
   # so drop it where vim's default runtimepath finds it.
