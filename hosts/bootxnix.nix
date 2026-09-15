@@ -39,6 +39,11 @@ in
 
     networking.hostName = host;
 
+    # Lab box: allow unfree so the full pentest toolset evaluates (several
+    # nixpkgs security tools carry an unfree license). No proprietary GUI apps
+    # are installed by choice; see modules/tooling.nix and modules/browsers.nix.
+    nixpkgs.config.allowUnfree = true;
+
     users.mutableUsers = true;
     users.users.${user} = {
       isNormalUser = true;

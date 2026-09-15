@@ -4,7 +4,8 @@
 # renamed upstream.
 #
 # Changes from the archived VirtualBox config:
-#   - No Burp Suite / jdk17 / jython: proprietary, replaced by ZAP + mitmproxy.
+#   - No Burp Suite / jdk17 / jython: replaced by ZAP + mitmproxy (a product
+#     choice; allowUnfree is on for the rest of the toolset).
 #   - No boot-time systemd installers for penelope/pdtm. They fetched from the
 #     network at every boot and hardcoded a home path. penelope is a pinned
 #     package below; pdtm is dropped (its tools are packaged individually).
@@ -23,7 +24,7 @@ let
 in
 {
   environment.systemPackages =
-    # Web proxies (interception). No Burp: free software only.
+    # Web proxies (interception). No Burp by choice; ZAP + mitmproxy instead.
     builtins.concatLists [
       (pick pkgs "zap")
       (pick pkgs "mitmproxy")

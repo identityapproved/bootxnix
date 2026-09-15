@@ -13,6 +13,7 @@ let
     (pick "vim-surround")
     (pick "vim-fugitive")
     (pick "vim-gitgutter")
+    (pick "vim-polyglot")
     (pick "undotree")
     (pick "vim-sleuth")
     (pick "indentLine")

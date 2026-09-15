@@ -19,6 +19,8 @@
     };
   };
 
+  # allowUnfree is set in hosts/bootxnix.nix (several pentest tools are
+  # unfree-licensed). No proprietary GUI apps are installed by choice.
   outputs = { self, nixpkgs, zen-browser, penelope, ... }:
     let
       system = "x86_64-linux";
