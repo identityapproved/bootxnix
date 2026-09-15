@@ -29,6 +29,9 @@
     fastfetch
     xclip
     feh
+    # CLI only: NixOS ships the openssl library in the closure but not the
+    # binary, so `openssl x509`/`s_client` are unavailable without this.
+    openssl
     unzip
     p7zip
     file
