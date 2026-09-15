@@ -7,18 +7,19 @@ let
     conf = builtins.readFile ../config/suckless/dwm/config.h;
   };
 
+  # st and slstatus ship a full, version-matched config.def.h (the Makefile
+  # copies config.def.h -> config.h). Full files instead of in-place edits so
+  # there is no regex fragility; re-check them only if upstream bumps the
+  # config layout.
   st = pkgs.st.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
-      ${pkgs.gawk}/bin/awk -f ${../config/suckless/st.awk} config.def.h > config.def.h.new
-      mv config.def.h.new config.def.h
-      sed -i 's/^static char \*font = .*/static char *font = "AnonymicePro Nerd Font Mono:pixelsize=14:antialias=true:autohint=true";/' config.def.h
+      cp ${../config/suckless/st/config.h} config.def.h
     '';
   });
 
   slstatus = pkgs.slstatus.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
-      ${pkgs.gawk}/bin/awk -f ${../config/suckless/slstatus.awk} config.def.h > config.def.h.new
-      mv config.def.h.new config.def.h
+      cp ${../config/suckless/slstatus/config.h} config.def.h
     '';
   });
 
