@@ -26,7 +26,7 @@ let
   # The one script in the repo: xrdp needs a single session command, generated
   # into the store. Runs as the logged-in user.
   session = pkgs.writeShellScript "bootxnix-session" ''
-    export PATH=${lib.makeBinPath [ pkgs.feh slstatus pkgs.coreutils dwm pkgs.xorg.setxkbmap ]}:$PATH
+    export PATH=${lib.makeBinPath [ pkgs.feh slstatus pkgs.coreutils dwm pkgs.setxkbmap ]}:$PATH
     # Re-assert the keymap inside the session: xrdp/xorgxrdp sets its own keymap
     # from what the RDP client advertises, which overrides services.xserver.xkb.
     setxkbmap -layout us,ua -option grp:sclk_toggle,caps:swapescape
