@@ -23,6 +23,13 @@ let
     '';
 in
 {
+  # firejail for cs-cve (ctfstick sandboxes downloaded PoCs with it). Enabled as
+  # a program, not a bare package: NixOS needs the setuid wrapper for the
+  # sandbox to work. ctfstick's other runtime deps (jq, fzf, uv, openvpn,
+  # wireguard-tools, python3) are already provided by base/languages/tooling,
+  # so the `cs` harness runs on this box directly - no Kali VM needed.
+  programs.firejail.enable = true;
+
   environment.systemPackages =
     # Web proxies (interception). No Burp by choice; ZAP + mitmproxy instead.
     builtins.concatLists [
