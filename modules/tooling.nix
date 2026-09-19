@@ -65,6 +65,8 @@ in
       (pick pkgs "theharvester")
       (pick pkgs "enum4linux-ng")
       (pick pkgs "ldapdomaindump")
+      (pick pkgs "rustscan")
+      (pick pkgs "dnsutils")        # dig/nslookup/host - cs dig-recon flow
     ]
     # AD / Windows / lateral movement
     ++ builtins.concatLists [
@@ -72,6 +74,28 @@ in
       (pick pkgs "sshpass")
       (pick pkgs "freerdp")
       (pick pkgs "wireguard-tools")
+      (pick pkgs "netexec")
+      (pick pkgs "evil-winrm")
+      (pick pkgs "certipy-ad")
+      (pick pkgs.python3Packages "certipy-ad")
+      (pick pkgs "kerbrute")
+      (pick pkgs "responder")
+      (pick pkgs.python3Packages "bloodhound-py")
+      # smbclient/rpcclient/nmblookup - cs windows-recon + smb flows call these
+      # bare Samba binaries (impacket's smbclient.py is a separate wrapper).
+      (pick pkgs "samba")
+      (pick pkgs "smbmap")
+      (pick pkgs "openldap")        # ldapsearch - cs windows-recon flow
+      (pick pkgs "bloodyad")        # AD object abuse (tools.md AD section)
+      (pick pkgs.python3Packages "bloodyad")
+      (pick pkgs "libfaketime")     # faketime - Kerberos clock-skew on AD boxes
+    ]
+    # Pivoting / tunneling
+    ++ builtins.concatLists [
+      (pick pkgs "chisel")
+      (pick pkgs "ligolo-ng")
+      (pick pkgs "proxychains-ng")
+      (pick pkgs "socat")
     ]
     # Exploitation / Frameworks
     ++ builtins.concatLists [

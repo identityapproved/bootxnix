@@ -80,6 +80,15 @@ in
     time.timeZone = "UTC";
     i18n.defaultLocale = "en_US.UTF-8";
 
+    # A long-lived lab container accumulates rebuild generations; collect them
+    # on a timer (the `ngc` alias stays for on-demand) and dedupe the store.
+    nix.gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
+    nix.settings.auto-optimise-store = true;
+
     system.stateVersion = "26.05";
   };
 }
